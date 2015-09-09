@@ -1,12 +1,14 @@
 <?php
 
-define('APPLICATION_PATH', dirname(__FILE__) . "/../application/");
+
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', dirname(__FILE__) . "/../application/");
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 //autoloader
-require_once APPLICATION_PATH . "Autoloader.php";
+require_once APPLICATION_PATH . "Library/Autoloader.php";
+Library_Autoloader::register();
 
-Autoloader::register();
-$oBoostrap = new Bootstrap();
+$oBoostrap = new Library_Bootstrap();
 $oBoostrap->init($_REQUEST);
 
 
