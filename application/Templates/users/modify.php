@@ -6,7 +6,7 @@
         <form class="col s8" action="/users/save" method="POST">
             <div class="row">
                 <div class="input-field col s6">
-                    <input id="firstname" name="firstname" type="text" class="validate">
+                    <input id="firstname" name="contact[firstname]" type="text" class="validate">
                     <label for="first_name">First Name</label>
                 </div>
                 <div class="input-field col s6">

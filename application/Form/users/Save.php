@@ -16,6 +16,7 @@ class Form_Users_Save extends Library_Form {
     public function __construct() {
 
         $this->_aFields['firstname'] = array(
+            "belongsTo" => "contact",
             "clean" => array("trim"),
             "validate" => array("required", "string")
         );

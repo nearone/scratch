@@ -14,7 +14,7 @@ class Logic_Users extends Library_Template {
 
     public function modify() {
 
-        $this->render();
+        $this->render('users/modify');
     }
 
     public function add() {
@@ -27,27 +27,22 @@ class Logic_Users extends Library_Template {
         $oForm = new Form_Users_Save();
 
         try {
+
             if (!$oForm->isValid($_POST)) {
                 throw new Exception(Library_Form::FORM_ERROR_MESSAGE, Library_Form::FORM_ERROR_CODE);
             }
 
             $aInputs = $oForm->getValues($_POST);
         } catch (Exception $e) {
-            $this->handleErrors($oForm);
+            switch ($e->getCode()) {
+                case Library_Form::FORM_ERROR_CODE:
+                    $this->aVars['aErrors'] = $oForm->getErrors();
+                    break;
+                default:
+            }
         }
-
-
-
-        exit('stop');
-    }
-
-    public function handleErrors($oForm) {
-        switch ($e->getCode()) {
-            case "":
-                break;
-            default:
-        }
-        $oForm->getErrors();
+        
+        $this->modify();
     }
 
 }

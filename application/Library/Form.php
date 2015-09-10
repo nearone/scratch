@@ -19,42 +19,66 @@ class Library_Form {
     const NOT_EMAIL_MESSAGE = "Format not valid";
     const NOT_EMAIL_CODE = 1003;
 
-    public function isValid($aInputs) {
+    public function validate($aValidators, $sValue) {
+        @array_map(function($sMethod) use ($sValue) {
+                    $sMethod = "is_{$sMethod}";
+                    if (method_exists($this, $sMethod)) {
+                        $this->{$sMethod}($sValue);
+                    }
+                }, $aValidators);
+    }
 
-        foreach ($this->_aFields as $sField => $sOptions) {
+    public function isValid($aInputs) {
+        
+        foreach ($this->_aFields as $sField => $aOptions) {
 
             try {
 
-                $sValue = $aInputs[$sField];
-
-                @array_map(function($sMethod) use ($sValue) {
-                            $sMethod = "is_{$sMethod}";
-                            if (method_exists($this, $sMethod)) {
-                                $this->{$sMethod}($sValue);
-                            }
-                        }, $sOptions['validate']);
+                $bIsGrupped = isset($aOptions['belongsTo']);
+                $sValue = $bIsGrupped ? $aInputs[$aOptions['belongsTo']][$sField] : $aInputs[$sField];
+                $this->validate($aOptions['validate'], $sValue);
             } catch (Exception $e) {
-                $this->_aErrors[$sField][] = $e->getMessage();
+                if ($bIsGrupped) {
+                    $this->_aErrors[$sField][] = $e->getMessage();
+                } else {
+                    $this->_aErrors[$aOptions['belongsTo']][$sField][] = $e->getMessage();
+                }
             }
         }
 
         return empty($this->_aErrors);
     }
 
+    public function cleanValue($aCleans, $sValue, $sField, $sFieldGroup) {
+        $aValue = array_reduce($aCleans, function($aTempValues, $sMethod) use ($sValue, $sField, $sFieldGroup) {
+            $sMethod = "do_{$sMethod}";
+            if (method_exists($this, $sMethod)) {
+                if ($sFieldGroup != '') {
+                    return $aTempValues[$sFieldGroup][$sField] = $this->{$sMethod}($sValue);
+                } else {
+                    return $aTempValues[$sField] = $this->{$sMethod}($sValue);
+                }
+            }
+        });
+
+        return $aValue;
+    }
+
     public function getValues($aInputs) {
-        
+
         $aValues = array();
 
         foreach ($this->_aFields as $sField => $sOptions) {
 
-            $sValue = isset($aValues[$sField]) ? $aValues[$sField] : $aInputs[$sField];
+            $bIsGrupped = isset($sOptions['belongsTo']);
 
-            $aValues[] = array_reduce($sOptions['clean'], function($aTempValues, $sMethod) use ($sValue, $sField) {               
-                $sMethod = "do_{$sMethod}";
-                if (method_exists($this, $sMethod)) {
-                    return $aTempValues[$sField] = $this->{$sMethod}($sValue);
-                }
-            });
+            if ($bIsGrupped) {
+                $sValue = isset($aValues[$sOptions['belongsTo']][$sField]) ? $aValues[$sOptions['belongsTo']][$sField] : $aInputs[$sOptions['belongsTo']][$sField];
+            } else {
+                $sValue = isset($aValues[$sField]) ? $aValues[$sField] : $aInputs[$sField];
+            }
+
+            $aValues[] = $this->cleanValue($sOptions['clean'], $sValue, $sField, $bIsGrupped ? $sOptions['belongsTo'] : null);
         }
 
         return $aValues;
