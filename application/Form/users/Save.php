@@ -11,23 +11,22 @@
  *
  * @author arnlerou
  */
-class Form_Users_Save {
-
-    private $_aFields = array();
+class Form_Users_Save extends Library_Form {
 
     public function __construct() {
-        
+
         $this->_aFields['firstname'] = array(
-            "required" => true,
-            ""
+            "clean" => array("trim"),
+            "validate" => array("required", "string")
         );
-        
+        $this->_aFields['lastname'] = array(
+            "clean" => array("trim"),
+            "validate" => array("required", "string")
+        );
+        $this->_aFields['email'] = array(
+            "clean" => array("trim"),
+            "validate" => array("required", "email")
+        );
     }
-    
-    public function isValid(){}
-    
-    public function getValues(){}
-    
-    public function getErrors(){}
 
 }

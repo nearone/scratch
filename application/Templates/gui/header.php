@@ -1,4 +1,4 @@
-<nav>
+<nav class="red">
     <div class="container">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo">Logo</a>
