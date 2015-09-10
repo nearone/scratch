@@ -2,37 +2,28 @@
 <?php include(APPLICATION_PATH . 'Templates/gui/header.php'); ?>
 
 <div class="container">
-    <table>
-        <thead>
-            <tr>
-                <th data-field="id">Name</th>
-                <th data-field="name">Item Name</th>
-                <th data-field="price">Item Price</th>
-                <th data-field="plus"></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>Alvin</td>
-                <td>Eclair</td>
-                <td>$0.87</td>
-                <td><a class="waves-effect waves-light btn red">Detail</a></td>
-            </tr>
-            <tr>
-                <td>Alan</td>
-                <td>Jellybean</td>
-                <td>$3.76</td>
-                <td><a class="waves-effect waves-light btn red">Detail</a></td>
-            </tr>
-            <tr>
-                <td>Jonathan</td>
-                <td>Lollipop</td>
-                <td>$7.00</td>
-                <td><a class="waves-effect waves-light btn red">Detail</a></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <form class="col s8" action="/users/save" method="POST">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="first_name" type="text" class="validate">
+                    <label for="first_name">First Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="last_name" type="text" class="validate">
+                    <label for="last_name">Last Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="email" type="email" class="validate">
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <button class="btn waves-effect waves-light red" type="submit" name="action">Submit
+            </button>
+        </form>
+    </div>
 </div>
 
 <?php include(APPLICATION_PATH . 'Templates/gui/footer.php'); ?>
