@@ -1,6 +1,8 @@
 <?php include(APPLICATION_PATH . 'Templates/gui/head.php'); ?>
 <?php include(APPLICATION_PATH . 'Templates/gui/header.php'); ?>
 
+<?php var_dump($aVars); ?>
+
 <div class="container">
     <div class="row">
         <form class="col s8" action="/users/save" method="POST">

@@ -18,32 +18,34 @@ class Library_Form {
     const NOT_STRING_CODE = 1002;
     const NOT_EMAIL_MESSAGE = "Format not valid";
     const NOT_EMAIL_CODE = 1003;
+    const NOT_INTEGER_MESSAGE = "Format not valid";
+    const NOT_INTEGER_CODE = 1004;
 
-    public function validate($aValidators, $sValue) {
-        @array_map(function($sMethod) use ($sValue) {
-                    $sMethod = "is_{$sMethod}";
-                    if (method_exists($this, $sMethod)) {
-                        $this->{$sMethod}($sValue);
+    public function validate($aInputs, $sField, $aOptions) {
+
+        $bIsGrupped = isset($aOptions['belongsTo']);
+        $sValue = $bIsGrupped ? $aInputs[$aOptions['belongsTo']][$sField] : $aInputs[$sField];
+
+        @array_map(function($sMethod) use ($aInputs, $sField, $aOptions, $bIsGrupped, $sValue) {
+                    try {
+                        $sMethod = "is_{$sMethod}";
+                        if (method_exists($this, $sMethod)) {
+                            $this->{$sMethod}($sValue);
+                        }
+                    } catch (Exception $e) {
+                        if ($bIsGrupped) {
+                            $this->_aErrors[$aOptions['belongsTo']][$sField][] = $e->getMessage();
+                        } else {
+                            $this->_aErrors[$sField][] = $e->getMessage();
+                        }
                     }
-                }, $aValidators);
+                }, $aOptions['validate']);
     }
 
     public function isValid($aInputs) {
 
         foreach ($this->_aFields as $sField => $aOptions) {
-
-            try {
-
-                $bIsGrupped = isset($aOptions['belongsTo']);
-                $sValue = $bIsGrupped ? $aInputs[$aOptions['belongsTo']][$sField] : $aInputs[$sField];
-                $this->validate($aOptions['validate'], $sValue);
-            } catch (Exception $e) {
-                if ($bIsGrupped) {
-                    $this->_aErrors[$aOptions['belongsTo']][$sField][] = $e->getMessage();
-                } else {
-                    $this->_aErrors[$sField][] = $e->getMessage();
-                }
-            }
+            $this->validate($aInputs, $sField, $aOptions);
         }
 
         return empty($this->_aErrors);
@@ -103,6 +105,12 @@ class Library_Form {
     public function is_email($sValue) {
         if (!filter_var($sValue, FILTER_VALIDATE_EMAIL)) {
             throw new Exception(self::NOT_EMAIL_MESSAGE, self::NOT_EMAIL_CODE);
+        }
+    }
+
+    public function is_integer($sValue) {
+        if (!preg_match('/^[0-9]+$/', $sValue)) {
+            throw new Exception(self::NOT_INTEGER_MESSAGE, self::NOT_INTEGER_CODE);
         }
     }
 

@@ -15,6 +15,10 @@ class Form_Users_Save extends Library_Form {
 
     public function __construct() {
 
+        $this->_aFields['id'] = array(
+            "clean" => array("trim"),
+            "validate" => array("integer")
+        );
         $this->_aFields['firstname'] = array(
             "belongsTo" => "contact",
             "clean" => array("trim"),
