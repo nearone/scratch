@@ -19,7 +19,7 @@ class Library_Template {
         $sTemplatePath = !is_null($sTemplatePath) ? $sTemplatePath : $this->_sTemplatePath;
         $aVars = $this->aVars;
         
-        include(APPLICATION_PATH . "Templates/{$sTemplatePath}.php");
+        require APPLICATION_PATH . "Templates/{$sTemplatePath}.php";
     }
 
 }

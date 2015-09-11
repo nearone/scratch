@@ -5,7 +5,7 @@
     <div class="row">
 
         <div class="col-md-8">
-            <form action="/users/save" method="POST" class='dformservice'>
+            <form action="/users/save" method="POST" class='formservice'>
                 <?php if (isset($aVars['aUser']['id'])) { ?>
                     <input type="hidden" value='<?php echo $aVars['aUser']['id']; ?>' />
                 <?php } ?>
