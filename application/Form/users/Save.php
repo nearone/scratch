@@ -22,15 +22,18 @@ class Form_Users_Save extends Library_Form {
         $this->_aFields['firstname'] = array(
             "belongsTo" => "contact",
             "clean" => array("trim"),
-            "validate" => array("required", "string")
+            "required" => true,
+            "validate" => array("string")
         );
         $this->_aFields['lastname'] = array(
             "clean" => array("trim"),
-            "validate" => array("required", "string")
+            "required" => true,
+            "validate" => array("string")
         );
         $this->_aFields['email'] = array(
             "clean" => array("trim"),
-            "validate" => array("required", "email")
+            "required" => true,
+            "validate" => array("email")
         );
     }
 

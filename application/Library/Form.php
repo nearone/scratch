@@ -21,16 +21,19 @@ class Library_Form {
     const NOT_INTEGER_MESSAGE = "Format not valid";
     const NOT_INTEGER_CODE = 1004;
 
-    public function validate($aInputs, $sField, $aOptions) {
-
-        $bIsGrupped = isset($aOptions['belongsTo']);
-        $sValue = $bIsGrupped ? $aInputs[$aOptions['belongsTo']][$sField] : $aInputs[$sField];
-
-        @array_map(function($sMethod) use ($aInputs, $sField, $aOptions, $bIsGrupped, $sValue) {
+    public function validate($aInputs, $sField, $aOptions, $bIsGrupped, $sValue, $bIsRequired) {
+        @array_map(function($sMethod) use ($aInputs, $sField, $aOptions, $bIsGrupped, $sValue, $bIsRequired) {
                     try {
-                        $sMethod = "is_{$sMethod}";
-                        if (method_exists($this, $sMethod)) {
-                            $this->{$sMethod}($sValue);
+
+                        if ($bIsRequired) {
+                            $this->is_required($sValue);
+                        }
+
+                        if ($sValue != '') {
+                            $sMethod = "is_{$sMethod}";
+                            if (method_exists($this, $sMethod)) {
+                                $this->{$sMethod}($sValue);
+                            }
                         }
                     } catch (Exception $e) {
                         if ($bIsGrupped) {
@@ -45,7 +48,13 @@ class Library_Form {
     public function isValid($aInputs) {
 
         foreach ($this->_aFields as $sField => $aOptions) {
-            $this->validate($aInputs, $sField, $aOptions);
+
+            $bIsGrupped = isset($aOptions['belongsTo']);
+            $sValue = $bIsGrupped ? $aInputs[$aOptions['belongsTo']][$sField] : $aInputs[$sField];
+            $bIsRequired = isset($aOptions['required']) && $aOptions['required'];
+
+
+            $this->validate($aInputs, $sField, $aOptions, $bIsGrupped, $sValue, $bIsRequired);
         }
 
         return empty($this->_aErrors);
