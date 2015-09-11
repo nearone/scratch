@@ -28,11 +28,11 @@ class Logic_Users extends Library_Template {
 
         try {
 
+            $aInputs = $oForm->getValues($_POST);
+
             if (!$oForm->isValid($_POST)) {
                 throw new Exception(Library_Form::FORM_ERROR_MESSAGE, Library_Form::FORM_ERROR_CODE);
             }
-
-            $aInputs = $oForm->getValues($_POST);
         } catch (Exception $e) {
             switch ($e->getCode()) {
                 case Library_Form::FORM_ERROR_CODE:
@@ -41,8 +41,10 @@ class Logic_Users extends Library_Template {
                 default:
             }
         }
-        
-        $this->modify();
+
+        $this->aVars['aUser'] = $aInputs;
+
+        $this->render('users/modify');
     }
 
 }

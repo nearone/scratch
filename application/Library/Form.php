@@ -29,7 +29,7 @@ class Library_Form {
     }
 
     public function isValid($aInputs) {
-        
+
         foreach ($this->_aFields as $sField => $aOptions) {
 
             try {
@@ -39,9 +39,9 @@ class Library_Form {
                 $this->validate($aOptions['validate'], $sValue);
             } catch (Exception $e) {
                 if ($bIsGrupped) {
-                    $this->_aErrors[$sField][] = $e->getMessage();
-                } else {
                     $this->_aErrors[$aOptions['belongsTo']][$sField][] = $e->getMessage();
+                } else {
+                    $this->_aErrors[$sField][] = $e->getMessage();
                 }
             }
         }
@@ -74,11 +74,11 @@ class Library_Form {
 
             if ($bIsGrupped) {
                 $sValue = isset($aValues[$sOptions['belongsTo']][$sField]) ? $aValues[$sOptions['belongsTo']][$sField] : $aInputs[$sOptions['belongsTo']][$sField];
+                $aValues[$sOptions['belongsTo']][$sField] = $this->cleanValue($sOptions['clean'], $sValue, $sField, $bIsGrupped ? $sOptions['belongsTo'] : null);
             } else {
                 $sValue = isset($aValues[$sField]) ? $aValues[$sField] : $aInputs[$sField];
+                $aValues[$sField] = $this->cleanValue($sOptions['clean'], $sValue, $sField, $bIsGrupped ? $sOptions['belongsTo'] : null);
             }
-
-            $aValues[] = $this->cleanValue($sOptions['clean'], $sValue, $sField, $bIsGrupped ? $sOptions['belongsTo'] : null);
         }
 
         return $aValues;
