@@ -44,6 +44,10 @@ class Logic_Users extends Library_Template {
 
         $this->aVars['aUser'] = $aInputs;
 
+        $aAjaxOptions = array(
+            "status"
+        );
+
         $this->render('users/modify');
     }
 

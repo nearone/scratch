@@ -5,11 +5,13 @@
  *
  * @author Arnaud Leroux
  */
-class Logic_Homepage extends Library_Template {
+class Logic_Homepage extends TwigTemplate {
 
     public function index() {
 
-        $this->render();
+        $this->vars = array('test' => 'hello');
+
+        echo $this->render('index.html.twig');
     }
 
 }
