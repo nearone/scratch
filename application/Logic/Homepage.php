@@ -11,7 +11,7 @@ class Logic_Homepage extends TwigTemplate {
 
         $this->vars = array('test' => 'hello');
 
-        echo $this->render('index.html.twig');
+        echo $this->render('index.html.twig', array('hiphop' => 'test'));
     }
 
 }

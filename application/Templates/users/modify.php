@@ -3,14 +3,11 @@
 
 <div class="container">
     <div class="row">
-
         <div class="col-md-8">
             <form action="/users/save" method="POST" class='formservice'>
                 <?php if (isset($aVars['aUser']['id'])) { ?>
                     <input type="hidden" value='<?php echo $aVars['aUser']['id']; ?>' />
                 <?php } ?>
-
-
                 <div class="form-group">
                     <input id="firstname" name="contact[firstname]" type="text" class="form-control" value='<?php echo isset($aVars['aUser']['contact']['firstname']) ? $aVars['aUser']['contact']['firstname'] : ''; ?>'>
                     <label for="first_name">First Name</label>

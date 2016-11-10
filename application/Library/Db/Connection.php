@@ -5,7 +5,7 @@
  *
  * @author Arnaud Leroux
  */
-class Library_Core_Connection {
+class Library_Db_Connection {
 
     private static $_instance = null;
     public $db;

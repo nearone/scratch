@@ -5,7 +5,7 @@
  *
  * @author Arnaud Leroux
  */
-abstract class Library_Core_Master {
+abstract class Library_Db_Master {
     
     public $db;
 
